@@ -1,0 +1,22 @@
+{
+  "name": "elm-demo",
+  "version": "1.0.0",
+  "description": "A short tutorial app for the elm tobe talk",
+  "main": "index.js",
+  "scripts": {
+    "build": "elm-make elm_client/Main.elm --debug --output=main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Chip Keyes",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.2"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-connect": "^5.0.0",
+    "gulp-elm": "^0.7.1",
+    "gulp-plumber": "^1.1.0",
+    "gulp-util": "^3.0.8"
+  }
+}
