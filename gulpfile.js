@@ -5,6 +5,8 @@ var elm = require('gulp-elm');
 var gutil = require('gulp-util');
 var plumber = require('gulp-plumber');
 var connect = require('gulp-connect');
+var nodemon = require('gulp-nodemon');
+var clean = require('gulp-clean');
 
 // File paths
 var paths = {
@@ -16,11 +18,17 @@ var paths = {
 // Init Elm
 gulp.task('elm-init', elm.init);
 
+gulp.task('clean', function() {
+  return gulp.src(paths.dest + '/**', {read: false})
+        .pipe(clean());
+});
+
 // Compile Elm to HTML
 gulp.task('elm', ['elm-init'], function(){
+
     return gulp.src(paths.elm)
         .pipe(plumber())
-        .pipe(elm())
+        .pipe(elm.make({debug: true}))
         .pipe(gulp.dest(paths.dest));
 });
 
@@ -32,19 +40,26 @@ gulp.task('static', function() {
 });
 
 // Watch for changes and compile
-gulp.task('watch', function() {
-    gulp.watch(paths.elm, ['elm']);
-    gulp.watch(paths.static, ['static']);
-});
+
+// gulp.task('watch-elm', function() {
+//   return gulp.watch(paths.elm, ['elm']);
+// });
+
+// gulp.task('watch-static', function() {
+//   return gulp.watch(paths.static, ['static']);
+// });
 
 // Local server
-gulp.task('connect', function() {
-    connect.server({
-        root: 'dist',
-        port: 3000
-    });
-});
+gulp.task('start', ['clean', 'build'], function () {
+  nodemon({
+    script: 'server.js'
+  , ext: 'elm js html'
+  , env: { 'NODE_ENV': 'development' }
+  , tasks: ['build']
+  , ignore: ['dist']
+  })
+})
 
 // Main gulp tasks
 gulp.task('build', ['elm', 'static']);
-gulp.task('default', ['connect', 'build', 'watch']);
+gulp.task('default', ['start']);

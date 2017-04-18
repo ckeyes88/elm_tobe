@@ -4,7 +4,10 @@
   "description": "A short tutorial app for the elm tobe talk",
   "main": "index.js",
   "scripts": {
-    "build": "elm-make elm_client/Main.elm --debug --output=main.js",
+    "prebuild": "rm -rf dist",
+    "static": "mkdir dist && cp src/index.html dist/",
+    "build": "npm run static && elm-make src/Main.elm --debug --output=dist/Main.js",
+    "start": "gulp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Chip Keyes",
@@ -14,8 +17,10 @@
   },
   "devDependencies": {
     "gulp": "^3.9.1",
+    "gulp-clean": "^0.3.2",
     "gulp-connect": "^5.0.0",
     "gulp-elm": "^0.7.1",
+    "gulp-nodemon": "^2.2.1",
     "gulp-plumber": "^1.1.0",
     "gulp-util": "^3.0.8"
   }
