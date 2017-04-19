@@ -1,36 +1,23 @@
 module Main exposing (..)
-import Html exposing (Html, h1, button, text, section)
-import Html.Attributes exposing (class)
-import Html.Events exposing (onClick)
 
-type Msg = Increment
-  | Decrement
+import Html exposing (Html, h1, button, input, text, section)
+import Html.Attributes exposing (class, value, type_)
+import Html.Events exposing (onClick, onInput)
 
-type alias Model = 
-  Int
+import Model exposing (..)
+import Update exposing (..)
+import Message exposing (..)
 
 initialModel : Model
 initialModel =
-  0
-
-update : Msg -> Model -> Model
-update msg currentVal =
-  case msg of
-    Increment -> 
-      currentVal + 1
-    Decrement ->
-      currentVal - 1
+  { counters = []
+  , input = ""
+  }
 
 view : Model -> Html Msg
 view model =
   section [ class "counter" ] 
-  [ button [ onClick Decrement ]
-    [ text "-" ]
-  , h1 []
-    [ text (toString model)
-    ]
-  , button [ onClick Increment ]
-    [ text "+" ]
+  [ input [ type_ "text", value model.input, onInput (MsgForInput (InputChange ))]
   ]
 
 main : Program Never Model Msg
