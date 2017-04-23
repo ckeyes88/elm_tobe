@@ -8,19 +8,26 @@ update msg model =
   case msg of
     MsgForCounter counterMsg ->
       updateCounter counterMsg model
-    MsgForInput inputMsg ->
-      updateInput inputMsg model
+    InputChange value ->
+      { model | input = value }
+    MsgForCounterList counterListMsg ->
+      updateCounterList counterListMsg model
     _ -> 
       model
 
--- updateCounterList
--- MsgForCounterList counterListMsg ->
---       updateCounterList counterListMsg model
-updateInput : InputMsg -> Model -> Model
-updateInput msg model =
+updateCounterList : CounterListMsg -> Model -> Model 
+updateCounterList msg model = 
   case msg of
-    InputChange input -> 
-      { model | input = input }
+    AddCounter -> 
+      { model | input = ""
+      , counters = { name = model.input
+        , value = 0
+        , id = model.nextId
+        } :: model.counters
+      , nextId = model.nextId + 1
+      }
+    _ -> 
+      model
 
 updateCounter : CounterMsg -> Model -> Model
 updateCounter counterMsg model =

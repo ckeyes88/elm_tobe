@@ -12416,77 +12416,261 @@ var _elm_lang$html$Html_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
-var _user$project$Main$update = F2(
-	function (msg, currentVal) {
-		var _p0 = msg;
-		if (_p0.ctor === 'Increment') {
-			return currentVal + 1;
-		} else {
-			return currentVal - 1;
-		}
+var _elm_lang$html$Html_Keyed$node = _elm_lang$virtual_dom$VirtualDom$keyedNode;
+var _elm_lang$html$Html_Keyed$ol = _elm_lang$html$Html_Keyed$node('ol');
+var _elm_lang$html$Html_Keyed$ul = _elm_lang$html$Html_Keyed$node('ul');
+
+var _user$project$Model$Counter = F3(
+	function (a, b, c) {
+		return {name: a, id: b, value: c};
 	});
-var _user$project$Main$initialModel = 0;
-var _user$project$Main$Decrement = {ctor: 'Decrement'};
-var _user$project$Main$Increment = {ctor: 'Increment'};
-var _user$project$Main$view = function (model) {
-	return A2(
-		_elm_lang$html$Html$section,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('counter'),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$button,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$Decrement),
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text('-'),
-					_1: {ctor: '[]'}
-				}),
-			_1: {
+var _user$project$Model$Model = F3(
+	function (a, b, c) {
+		return {counters: a, input: b, nextId: c};
+	});
+
+var _user$project$Message$Decrement = function (a) {
+	return {ctor: 'Decrement', _0: a};
+};
+var _user$project$Message$Increment = function (a) {
+	return {ctor: 'Increment', _0: a};
+};
+var _user$project$Message$RemoveCounter = function (a) {
+	return {ctor: 'RemoveCounter', _0: a};
+};
+var _user$project$Message$AddCounter = {ctor: 'AddCounter'};
+var _user$project$Message$InputChange = function (a) {
+	return {ctor: 'InputChange', _0: a};
+};
+var _user$project$Message$MsgForCounterList = function (a) {
+	return {ctor: 'MsgForCounterList', _0: a};
+};
+var _user$project$Message$MsgForCounter = function (a) {
+	return {ctor: 'MsgForCounter', _0: a};
+};
+var _user$project$Message$NoOp = {ctor: 'NoOp'};
+
+var _user$project$Counter_View$counterView = function (counter) {
+	return {
+		ctor: '_Tuple2',
+		_0: _elm_lang$core$Basics$toString(counter.id),
+		_1: A2(
+			_elm_lang$html$Html$section,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('counter'),
+				_1: {ctor: '[]'}
+			},
+			{
 				ctor: '::',
 				_0: A2(
-					_elm_lang$html$Html$h1,
-					{ctor: '[]'},
+					_elm_lang$html$Html$button,
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html$text(
-							_elm_lang$core$Basics$toString(model)),
+						_0: _elm_lang$html$Html_Events$onClick(
+							_user$project$Message$MsgForCounter(
+								_user$project$Message$Decrement(counter.id))),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('Decrement'),
 						_1: {ctor: '[]'}
 					}),
 				_1: {
 					ctor: '::',
 					_0: A2(
-						_elm_lang$html$Html$button,
+						_elm_lang$html$Html$h1,
+						{ctor: '[]'},
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Events$onClick(_user$project$Main$Increment),
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('+'),
+							_0: _elm_lang$html$Html$text(counter.name),
 							_1: {ctor: '[]'}
 						}),
-					_1: {ctor: '[]'}
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$h3,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(
+									_elm_lang$core$Basics$toString(counter.value)),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$button,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onClick(
+										_user$project$Message$MsgForCounter(
+											_user$project$Message$Increment(counter.id))),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Increment'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
 				}
+			})
+	};
+};
+
+var _user$project$Update$decrementCounterById = F2(
+	function (id, counter) {
+		return _elm_lang$core$Native_Utils.eq(counter.id, id) ? _elm_lang$core$Native_Utils.update(
+			counter,
+			{value: counter.value - 1}) : counter;
+	});
+var _user$project$Update$incrementCounterById = F2(
+	function (id, counter) {
+		return _elm_lang$core$Native_Utils.eq(counter.id, id) ? _elm_lang$core$Native_Utils.update(
+			counter,
+			{value: counter.value + 1}) : counter;
+	});
+var _user$project$Update$updateCounter = F2(
+	function (counterMsg, model) {
+		var _p0 = counterMsg;
+		if (_p0.ctor === 'Increment') {
+			return _elm_lang$core$Native_Utils.update(
+				model,
+				{
+					counters: A2(
+						_elm_lang$core$List$map,
+						_user$project$Update$incrementCounterById(_p0._0),
+						model.counters)
+				});
+		} else {
+			return _elm_lang$core$Native_Utils.update(
+				model,
+				{
+					counters: A2(
+						_elm_lang$core$List$map,
+						_user$project$Update$decrementCounterById(_p0._0),
+						model.counters)
+				});
+		}
+	});
+var _user$project$Update$updateCounterList = F2(
+	function (msg, model) {
+		var _p1 = msg;
+		if (_p1.ctor === 'AddCounter') {
+			return _elm_lang$core$Native_Utils.update(
+				model,
+				{
+					input: '',
+					counters: {
+						ctor: '::',
+						_0: {name: model.input, value: 0, id: model.nextId},
+						_1: model.counters
+					},
+					nextId: model.nextId + 1
+				});
+		} else {
+			return model;
+		}
+	});
+var _user$project$Update$update = F2(
+	function (msg, model) {
+		var _p2 = msg;
+		switch (_p2.ctor) {
+			case 'MsgForCounter':
+				return A2(_user$project$Update$updateCounter, _p2._0, model);
+			case 'InputChange':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{input: _p2._0});
+			case 'MsgForCounterList':
+				return A2(_user$project$Update$updateCounterList, _p2._0, model);
+			default:
+				return model;
+		}
+	});
+
+var _user$project$Main$renderCounters = function (counters) {
+	return A2(_elm_lang$core$List$map, _user$project$Counter_View$counterView, counters);
+};
+var _user$project$Main$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$section,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('app'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$section,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('counter'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$input,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$type_('text'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$value(model.input),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onInput(_user$project$Message$InputChange),
+									_1: {ctor: '[]'}
+								}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$button,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onClick(
+									_user$project$Message$MsgForCounterList(_user$project$Message$AddCounter)),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('Add new counter'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html_Keyed$ul,
+					{ctor: '[]'},
+					_user$project$Main$renderCounters(model.counters)),
+				_1: {ctor: '[]'}
 			}
 		});
 };
+var _user$project$Main$initialModel = {
+	counters: {ctor: '[]'},
+	input: '',
+	nextId: 0
+};
 var _user$project$Main$main = _elm_lang$html$Html$beginnerProgram(
-	{model: _user$project$Main$initialModel, update: _user$project$Main$update, view: _user$project$Main$view})();
+	{model: _user$project$Main$initialModel, update: _user$project$Update$update, view: _user$project$Main$view})();
 
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
 if (typeof _user$project$Main$main !== 'undefined') {
-    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Main.Msg":{"args":[],"tags":{"Decrement":[],"Increment":[]}}},"aliases":{},"message":"Main.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Message.Msg":{"args":[],"tags":{"InputChange":["String"],"MsgForCounter":["Message.CounterMsg"],"MsgForCounterList":["Message.CounterListMsg"],"NoOp":[]}},"Message.CounterListMsg":{"args":[],"tags":{"RemoveCounter":["Int"],"AddCounter":[]}},"Message.CounterMsg":{"args":[],"tags":{"Decrement":["Int"],"Increment":["Int"]}}},"aliases":{},"message":"Message.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

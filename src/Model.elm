@@ -9,4 +9,5 @@ type alias Counter =
 type alias Model =
   { counters : List Counter
   , input : String
+  , nextId : Int
   }
