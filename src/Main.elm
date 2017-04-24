@@ -1,4 +1,8 @@
 module Main exposing (..)
+<<<<<<< HEAD
+=======
+import Html exposing (Html, text)
+>>>>>>> 97dab4b68906555c4012cab67fdf2ead95b8bc96
 
 import Html exposing (Html, h1, button, input, text, section, li)
 import Html.Attributes exposing (class, value, type_)
